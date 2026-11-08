@@ -3,7 +3,8 @@
 // Data: CoinGecko public API, no key. No private key stored here — only the payout address.
 // Default config is Base Sepolia TESTNET (free test, facilitator x402.org).
 // For mainnet listing, set NETWORK=eip155:8453 and FACILITATOR_URL to a production
-// facilitator (e.g. Coinbase CDP) — do NOT reuse https://x402.org/facilitator on mainnet.
+// facilitator (https://facilitator.openx402.ai — no API key, verified 2026-11-08) —
+// do NOT reuse https://x402.org/facilitator on mainnet.
 import express from "express";
 import { paymentMiddleware, x402ResourceServer } from "@x402/express";
 import { ExactEvmScheme } from "@x402/evm/exact/server";
@@ -58,4 +59,10 @@ app.get("/price", async (req, res) => {
   }
 });
 
-app.listen(PORT, () => console.log(`crypto-price-api listening on :${PORT} network=${NETWORK} price=${PRICE} payTo=${PAY_TO}`));
+export default app;
+
+// Only listen when run directly (Render / local). On Vercel the platform
+// invokes the exported app as a serverless function, so do not listen.
+if (process.env.VERCEL !== "1" && import.meta.url === `file://${process.argv[1]}`) {
+  app.listen(PORT, () => console.log(`crypto-price-api listening on :${PORT} network=${NETWORK} price=${PRICE} payTo=${PAY_TO}`));
+}
