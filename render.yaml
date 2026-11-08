@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: vapi-crypto-price-api
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PAY_TO
+        value: 0xc75e45ac4e26700b726651c985eda777a796c25f
+      - key: NETWORK
+        value: eip155:8453
+      - key: PRICE
+        value: $0.01
+      - key: FACILITATOR_URL
+        value: https://facilitator.openx402.ai
